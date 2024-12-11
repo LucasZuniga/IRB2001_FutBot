@@ -1,5 +1,5 @@
-from funciones_3 import start, procesar_camara, gestionar_inputs, ser
-import threading
+from funciones_3 import procesar_camara, ser
+
 
 
 

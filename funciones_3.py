@@ -40,6 +40,10 @@ def calcular_angulo(p1, p2, p3):
     angle2 = math.degrees(math.atan2(p1[1] - p3[1], p1[0] - p3[0]))
 
     theta = angle1 - angle2
+
+    theta = (theta + 180) % 360 - 180
+
+    theta = round(theta, 2)
     
     # Descomponemos los puntos en coordenadas
     x1, y1 = p1
@@ -200,8 +204,8 @@ def procesar_camara():
     low_yellow = np.array([20, 50, 5])
     high_yellow = np.array([40, 255, 255])
 
-    low_pink = np.array([135, 110, 110])
-    high_pink = np.array([165, 255, 255])
+    low_pink = np.array([130, 100, 110])
+    high_pink = np.array([170, 255, 255])
 
     low_purple = np.array([135, 5, 20])
     high_purple= np.array([165, 130, 130])
@@ -213,7 +217,7 @@ def procesar_camara():
     pid_ang = PID(1.5, 0, 0, setpoint=0)
     pid_lin = PID(1.5, 0, 0, setpoint=20)
 
-    pid_ang_2 = PID(0.5, 0, 0, setpoint=0)
+    pid_ang_2 = PID(5, 0, 0, setpoint=0)
     pid_lin_2 = PID(0.5, 0, 0, setpoint=20)
 
     ################ Faltaría tunear los PDI ###############################
@@ -300,9 +304,24 @@ def procesar_camara():
             else:
 
                 objetivo(theta_p, dist_p, pid_ang, pid_lin, 
-                        lambda: cv2.line(img, centro_naranja, centro_arco_morado, (0, 0, 0), 2), nombre="pelota", tolerancia=7
+                        lambda: print("aaaa"), nombre="pelota", tolerancia=7
                         )
                 cv2.line(img, centro_naranja, centro_amarillo, (0, 0, 0), 2)
+
+                if dist_p <= 25:
+
+                    objetivo(theta_am, 0, pid_ang, pid_lin, 
+                            lambda: print("bbbbbbbb"), nombre="arco morado", tolerancia=7
+                            )
+
+                    cv2.line(img, centro_naranja, centro_arco_morado, (0, 0, 0), 2)
+
+                else:
+
+                    objetivo(theta_p, dist_p, pid_ang, pid_lin, 
+                            lambda: print("aaaaaaaa"), nombre="pelota", tolerancia=7
+                            )
+                    cv2.line(img, centro_naranja, centro_amarillo, (0, 0, 0), 2)
 
 
 
