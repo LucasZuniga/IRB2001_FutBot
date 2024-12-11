@@ -122,15 +122,15 @@ def start():
     global output_queue
 
 
-    pid_ang = PID(1.5, 0, 0, setpoint=0)
-    pid_lin = PID(1.5, 0, 0, setpoint=20)
+    pid_ang = PID(1.5, 0.01, 0.001, setpoint=0)
+    pid_lin = PID(1.5, 0.01, 0.001, setpoint=20)
 
-    pid_ang_2 = PID(0.5, 0, 0, setpoint=0)
+    pid_ang_2 = PID(0.5, 0.01, 0, setpoint=0)
 
     ################ Faltaría tunear los PDI ###############################
 
-    pid_ang.output_limits = (-100, 100)
-    pid_lin.output_limits = (-100, 100)
+    pid_ang.output_limits = (-250, 250)
+    pid_lin.output_limits = (-250, 250)
 
     pid_ang.sample_time = 0.2
     pid_lin.sample_time = 0.2
@@ -214,8 +214,12 @@ def procesar_camara():
 
     modo_de_juego = "pelota" #Cambiar directamente esta linea para cambiar el modo por ahora. Es más seguro de que funcione
 
-    pid_ang = PID(1.5, 0, 0, setpoint=0)
-    pid_lin = PID(1.5, 0, 0, setpoint=20)
+    # pid_ang = PID(1.5, 0, 0, setpoint=0)
+    # pid_lin = PID(1.5, 0, 0, setpoint=20)
+
+    pid_ang = PID(1.5, 0.01, 0.001, setpoint=0)
+    pid_lin = PID(1.5, 0.001, 0.001, setpoint=20)
+
 
     pid_ang_2 = PID(0.5, 0, 0, setpoint=0)
     pid_lin_2 = PID(0.5, 0, 0, setpoint=20)
@@ -314,7 +318,7 @@ def procesar_camara():
                 else:
 
                     objetivo(theta_p, dist_p, pid_ang_2, pid_lin, 
-                            lambda: print("aaaaaaaa"), nombre="pelota", tolerancia=5
+                            lambda: print("aaaaaaaa"), nombre="pelota", tolerancia=9
                             )
                     cv2.line(img, centro_naranja, centro_amarillo, (0, 0, 0), 2)
 
@@ -398,7 +402,7 @@ def objetivo(theta, dist, pid_ang, pid_lin, funcion_final, nombre = "", toleranc
         control_L = -pid_ang(theta)
 
         # Corrección lineal si el ángulo es pequeño
-        if abs(theta) <= tolerancia:
+        if theta <= tolerancia:
             control_R += pid_lin(dist)
             control_L += pid_lin(dist)
 
