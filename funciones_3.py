@@ -217,7 +217,7 @@ def procesar_camara():
     pid_ang = PID(1.5, 0, 0, setpoint=0)
     pid_lin = PID(1.5, 0, 0, setpoint=20)
 
-    pid_ang_2 = PID(5, 0, 0, setpoint=0)
+    pid_ang_2 = PID(0.5, 0, 0, setpoint=0)
     pid_lin_2 = PID(0.5, 0, 0, setpoint=20)
 
     ################ Faltaría tunear los PDI ###############################
@@ -303,23 +303,18 @@ def procesar_camara():
 
             else:
 
-                objetivo(theta_p, dist_p, pid_ang, pid_lin, 
-                        lambda: print("aaaa"), nombre="pelota", tolerancia=7
-                        )
-                cv2.line(img, centro_naranja, centro_amarillo, (0, 0, 0), 2)
-
                 if dist_p <= 25:
 
-                    objetivo(theta_am, 0, pid_ang, pid_lin, 
-                            lambda: print("bbbbbbbb"), nombre="arco morado", tolerancia=7
+                    objetivo(theta_am, dist_am, pid_ang, pid_lin, 
+                            lambda: print("bbbbbbbb"), nombre="arco morado", tolerancia=9
                             )
 
                     cv2.line(img, centro_naranja, centro_arco_morado, (0, 0, 0), 2)
 
                 else:
 
-                    objetivo(theta_p, dist_p, pid_ang, pid_lin, 
-                            lambda: print("aaaaaaaa"), nombre="pelota", tolerancia=7
+                    objetivo(theta_p, dist_p, pid_ang_2, pid_lin, 
+                            lambda: print("aaaaaaaa"), nombre="pelota", tolerancia=5
                             )
                     cv2.line(img, centro_naranja, centro_amarillo, (0, 0, 0), 2)
 
